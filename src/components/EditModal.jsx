@@ -1,24 +1,31 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 
-const EditModal = ({editData}) => {
-    console.log(editData)
+const EditModal = ({ editData, getTutorials }) => {
+  console.log(editData);
 
-    
   const [title, setTitle] = useState(editData.title);
   const [description, setDescription] = useState(editData.description);
 
-useEffect(()=> {
-    setTitle(editData.title)
-    setDescription(editData.description)
+  useEffect(() => {
+    setTitle(editData.title);
+    setDescription(editData.description);
+  }, [editData]);
 
-},[editData])
+  const editTutorial = async (tutorial) => {
+    try {
+      // await axios.put(`${process.env.REACT_APP_URL}${editData.id}/`, { title, description });
+      await axios.put(`${process.env.REACT_APP_URL}${editData.id}/`, tutorial);
+      getTutorials();
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const newTutor = { title, description };
-    // postTutorial(newTutor);
-    // setTitle("");
-    // setDescription("");
+    const newTutor = { title, description };
+    editTutorial(newTutor);
   };
 
   return (
@@ -75,14 +82,14 @@ useEffect(()=> {
                 </div>
                 <div className="d-flex justify-content-center align-items-center gap-2">
                   <button
-                    type="button"
-                    className="btn btn-secondary"
+                    type="submit"
+                    className="btn btn-danger "
                     data-bs-dismiss="modal"
                   >
-                    Close
-                  </button>
-                  <button type="submit" className="btn btn-danger">
                     Submit
+                  </button>
+                  <button className="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
                   </button>
                 </div>
               </form>
